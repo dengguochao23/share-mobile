@@ -1,0 +1,74 @@
+// 颜色定义规范
+$color-background-dark = black;
+//$color-background-dark-low = #16161A
+$color-background-dark-low = #393a3d
+$color-background-light = #F5F5F5;
+$color-background-light-hight = white;
+$color-dialog-background-dark = #F5F5F5;
+$color-dialog-background-light = black;
+$color-dialog-masking-dark = #666;
+$color-dialog-masking-light =#F5F5F5;
+$color-theme = #1B91F3;
+$color-theme-d = rgba(255, 205, 49, 0.5);
+$color-sub-theme = #1B91F3;
+$color-text = #000000;
+$color-text-desc = #999999;
+$color-text-dark = #D3D3D3;
+
+//视窗
+$width-container = 1200px;
+//字体定义规范
+$font-size-small-s = 0.5rem;
+$font-size-small = 0.8rem;
+$font-size-medium = 1rem;
+$font-size-medium-x = 1.1rem;
+$font-size-large = 1.2rem;
+$font-size-large-x = 1.4rem;
+$font-size-large-xx = 2rem;
+
+// 主题规范
+light = {
+  name: 'light',
+  // 页面背景
+  background_color_main: $color-background-light,
+  background_color_minor: $color-background-light-hight
+  // 弹出窗口背景
+  dialog_background: $color-dialog-background-light
+  dialog_masking: $color-dialog-masking-light
+  dialog_font_color: $color-text-dark
+  // 普通字体颜色
+  font_color_main: $color-text
+  font_color_minor: $color-text-desc
+}
+dark = {
+  name: 'dark',
+  // 页面背景
+  background_color_main: $color-background-dark,
+  background_color_minor: $color-background-dark-low,
+  // 弹出窗口
+  dialog_background: $color-dialog-background-dark
+  dialog_masking: $color-dialog-masking-dark
+  dialog_font_color: $color-text
+  // 普通字体颜色
+  font_color_main: $color-text-dark,
+  font_color_minor: $color-text-desc
+}
+
+themeList = (light dark)
+
+bgColor($color)
+  background-color: light[$color];
+  for item in themeList
+    // 通过for函数生成两个data-theme的值
+    // & 代表stylus插值是并的意思
+    [data-theme={item.name}] & {
+      background-color: item[$color];
+    }
+
+
+fontColor($color)
+  color: light[$color];
+  for item in themeList
+    [data-theme = {item.name}] & {
+      color: item[$color];
+    }
