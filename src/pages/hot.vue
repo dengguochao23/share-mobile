@@ -1,6 +1,9 @@
 <template>
   <div class="hot">
-    <my-head @back="onBack" />
+    <my-head
+      :title="'热心住户'"
+      @back="onBack"
+    />
     <div class="ranking">
       <div class="my">
         <p>目前你排名为第{{ data.myRank }}</p>
@@ -53,6 +56,26 @@
             />
           </div>
         </li>
+        <div
+          v-if="computedNextPage"
+          class="nextPage"
+          @click="nextPage"
+        >
+          <my-button
+            size="mini"
+            color="#1c92d2"
+            block
+            class="button"
+          >
+            下一页
+          </my-button>
+        </div>
+        <p
+          v-if="data.page === data.pages"
+          class="nothing"
+        >
+          没有更多内容了
+        </p>
       </ul>
     </scroll>
     <div
@@ -61,7 +84,7 @@
     >
       <ul ref="listShortcut">
         <li
-          v-for="(p,index) in data.page"
+          v-for="(p,index) in data.pageArray"
           :key="index"
           :data-index="index"
           class="item"
@@ -76,7 +99,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {Icon} from 'vant'
+import {Icon, Button} from 'vant'
 import Head from '../components/head'
 import {getAllUser, ranking} from '../api/user'
 import {reactive, onBeforeMount, toRef, computed} from 'vue'
@@ -94,30 +117,38 @@ export default {
   components: {
     MyIcon: Icon,
     MyHead: Head,
-    Scroll: Scroll
+    Scroll: Scroll,
+    MyButton: Button
   },
   setup() {
     const store = useStore()
     const data = reactive({
       list: [],
       page: 0,
+      pageArray: [],
       pages: 0,
       myRank: '',
     })
     const page = toRef(data, 'page')
     function addPage() {
-      if (data.page === data.pages) {
+      if (data.page === data.pages || data.list.length % 200 === 0) {
         return
       }
       data.page++
       _getAllUserByPage(data.page)
     }
-
+    function nextPage () {
+      data.list.splice(0, data.list.length)
+      data.pageArray.splice(0,10)
+      data.page++
+      _getAllUserByPage(data.page)
+    }
     function _getAllUserByPage(page) {
       loading()
       getAllUser(page).then(res => {
         data.list.push(...normalUser(res.data.data))
         data.page = res.data.page
+        data.pageArray.push(res.data.page)
         data.pages = res.data.pages
       }).then(() => {
         loading.close()
@@ -136,6 +167,7 @@ export default {
     return {
       data,
       addPage,
+      nextPage,
       page,
       use: computed(() => store.getters.userInfo)
     }
@@ -144,6 +176,11 @@ export default {
     return {
       currentPage: 0,
       scrollY: -1
+    }
+  },
+  computed: {
+    computedNextPage () {
+      return this.data['list'].length % 200 === 0
     }
   },
   watch: {
@@ -168,8 +205,6 @@ export default {
     this.touch = {}
     this.pageList = [0]
     this.listHeight = [0]
-  },
-  mounted() {
   },
   methods: {
     onBack() {
@@ -198,7 +233,7 @@ export default {
       } else {
         this.$router.push({ name: 'use', params: { uid: row.uid, nickname: row.nickname, room: row.room, logo: row.logo } }).catch(err => err)
       }
-    }
+    },
   }
 }
 </script>
@@ -289,6 +324,15 @@ export default {
 
         .arrow
           margin-right: 10px;
+    .nextPage
+      width 20%
+      margin 0 auto
+      padding-bottom 40px
+    .nothing
+      font-size $font-size-small
+      margin 0 auto
+      text-align center
+      fontColor(font_color_minor)
 
   .list-shortcut
     bgColor(background_color_main)

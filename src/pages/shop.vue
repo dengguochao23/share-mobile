@@ -11,6 +11,7 @@
       <sidebar
         class="sidebar"
         :title="title"
+        @change="scrollTo"
       />
       <scroll
         ref="scroll"
@@ -149,7 +150,7 @@ export default {
     const store = useStore()
     const data = reactive({
       list: [],
-      typeLength: [],
+      typeLength: [0],
       selected: []
     })
     const root = ref(null)
@@ -261,7 +262,12 @@ export default {
       }
       this.$refs.cartList.show()
     },
-    // 小球飞入的动画
+    // 快速滚动
+    scrollTo (item) {
+      let target = this.data.typeLength[item.id]
+      this.$refs.scroll.scrollToElement(this.$refs.listGroup.children[target], 200)
+    },
+    // 小球飞入的 动画
     addShopCart(item) {
       // 获得球的高度
       this.ballLeft = event.currentTarget.getBoundingClientRect().left
@@ -353,6 +359,7 @@ export default {
           font-size: $font-size-small
           position relative
           min-height 100px
+          align-items center
 
           .img
             margin 0 20px 0 10px
@@ -360,6 +367,7 @@ export default {
           .content
             display: flex;
             flex: 1;
+            fontColor(font_color_main)
             flex-direction: column;
           .cart-control
             position absolute
@@ -409,7 +417,7 @@ export default {
       left 6rem
       top 50%
       transform translateY(-50%)
-
+      fontColor(font_color_main)
     .button
       position absolute
       top 50%

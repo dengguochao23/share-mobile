@@ -38,7 +38,7 @@ export default {
   },
   watch: {
     active (newVal) {
-      this.$emit(CHANGE_EVENT, this.title[newVal])
+      this.$emit(CHANGE_EVENT, {'name': this.title[newVal],'id': newVal})
     }
   }
 }

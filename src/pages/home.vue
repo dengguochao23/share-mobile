@@ -68,7 +68,7 @@
       ref="detail"
       :type="type"
     />
-    <good-list ref="list"/>
+    <good-list ref="list" />
   </div>
 </template>
 

@@ -1,9 +1,19 @@
 <template>
   <div class="main">
     <my-scroll
+      ref="scroll"
       class="wrapper"
+      :probe-type="3"
+      :pull-down-load="true"
+      @pullingDown="updateUseInfo"
     >
       <section>
+        <div
+          v-if="loading"
+          class="loading"
+        >
+          <span /><span /><span />
+        </div>
         <div class="head">
           <my-image
             width="7rem"
@@ -169,17 +179,39 @@ export default {
   setup() {
     let theme = ref(true)
     const store = useStore()
+    let loading = ref( false)
     store.dispatch('getUser')
+
+    async function updateUseInfo() {
+      loading.value = true
+      await store.dispatch('getUser')
+      loading.value = false
+    }
+
     return {
       user: computed(() => store.getters.userInfo),
-      theme
+      theme,
+      updateUseInfo,
+      loading
     }
   },
   data() {
     return {}
   },
+  watch: {
+    loading (newVal) {
+      if(!newVal && this.time) {
+        this.time = setTimeout(() =>{
+          this.$refs.scroll.refresh()
+        }, 5000)
+      }
+    }
+  },
+  created() {
+    this.timer = ''
+  },
   methods: {
-    onAskForHelp(){
+    onAskForHelp() {
       this.$router.push('/ask').catch(err => err)
     },
     onHot() {
@@ -202,6 +234,7 @@ export default {
   right: 0;
   bottom: 3rem;
   width: 100%;
+
   .wrapper
     position: fixed;
     top: 0;
@@ -210,9 +243,35 @@ export default {
     bottom: 3rem;
     overflow: hidden;
     background-color: $color-theme;
+
     section
       width: 100%;
       bgColor(background_color_main)
+
+      .loading
+        width 100%
+        padding 10px 0
+        height 10px
+        text-align center
+        background-color: $color-theme;
+        span
+          display inline-block
+          width 10px
+          height 100%
+          margin-right 5px
+          border-radius 50%
+          background white
+          animation load 1.04s ease infinite;
+
+        span:last-child
+          margin-right 0px
+        span:nth-child(1)
+          animation-delay 0.23s
+        span:nth-child(2)
+          animation-delay 0.46s
+        span:nth-child(3)
+          animation-delay 0.69s
+
       .head
         background-color: $color-theme;
         width: 100%;
@@ -223,10 +282,12 @@ export default {
         align-items: center;
         border-bottom-left-radius: 45%;
         border-bottom-right-radius: 45%;
+
         p
           margin-top: 0.8rem;
           font-weight: 700;
-          color : white
+          color: white
+
       .info
         width: 85%;
         height: 5rem;
@@ -238,17 +299,20 @@ export default {
         box-shadow: 0px 2px 8px #A6A6A6;
         margin: 0 auto;
         margin-top: 1rem;
+
         .item
           display: flex;
           flex-direction: column;
           align-items: center;
           fontColor(font_color_main)
+
       .container
         width: 85%;
         display: flex;
         flex-direction: column;
         margin: 0 auto;
         justify-content: center;
+
         .item
           max-width: 100%;
           border-radius: 0.8rem;
@@ -259,26 +323,41 @@ export default {
           color: #ffff;
           margin-bottom: 10px;
           background-color: red;
+
           &.ask
             background-color: $color-theme;
+
           &.hot
             background-color: #F56C6C;
+
           &.help
             background-color: rgb(0, 172, 83);
+
           &.shop
             background-color: #909399;
+
           .left
             margin-left: 1rem;
             margin-right: 1rem;
+
           .name
             flex: 1;
+
             .title
               font-size: $font-size-large-x;
               font-weight: 700;
               margin-right: 1rem;
+
           .right
             margin-right: 1rem;
 
       .bottom
-        margin-top : 1.5rem
+        margin-top: 1.5rem
+
+@keyframes load
+  0%
+    opacity: 1
+  100%
+    opacity: 0
+
 </style>

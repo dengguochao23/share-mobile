@@ -9,6 +9,7 @@
         @back="onShow"
       />
       <my-scroll
+        v-if="data.list.length > 0"
         ref="scroll"
         class="wrapper"
         :data="data.list"
@@ -70,6 +71,7 @@
           </div>
         </section>
       </my-scroll>
+      <nothing v-else />
       <my-button
         type="primary"
         size="large"
@@ -94,6 +96,7 @@ import {handleMyGood} from '../api/goods'
 import Scroll from '../components/scroll'
 import Head from '../components/head'
 import AddGood from '../components/addGood'
+import Nothing from '../components/nothing'
 const normalGoods = noramlArray(createGoods)
 export default {
   name: 'GoodList',
@@ -102,7 +105,8 @@ export default {
     MyButton: Button,
     MyImage: Image,
     MyScroll: Scroll,
-    AddGood: AddGood
+    AddGood: AddGood,
+    Nothing: Nothing
   },
   setup() {
     const data = reactive({

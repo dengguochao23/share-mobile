@@ -5,7 +5,7 @@
     @leave="closeTo"
   >
     <div
-      v-show="show"
+      v-if="show"
       ref="listGroup"
       class="popup-wrapper"
     >
@@ -53,7 +53,7 @@ export default {
       el.style.transform = `translate3d(0px,${this.bottom}px, 0)`
     },
     showTo(el, done) {
-      let target = - (this.$refs.listGroup.offsetHeight + 48)
+      let target = - (this.$refs.listGroup.offsetHeight + this.bottom)
       this._reflow = document.body.offsetHeight // 重新计算小球高度
       el.style.transform = `translate3d(0px,${target}px,0)`
       el.style.transition = `all ${DURATION}s`
@@ -76,7 +76,6 @@ export default {
   width 100%
   position fixed
   left 0
-  background-color: white
-  padding-bottom 48px
+  bgColor(background_color_minor)
   top 100%
 </style>

@@ -19,6 +19,7 @@ export default {
       }
     }
   },
+  emits:['update:modelValue'],
   setup (props) {
     const show = toRef(props, 'modelValue')
     return {

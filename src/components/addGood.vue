@@ -19,10 +19,10 @@
           :center="true"
           :clearable="true"
           :error-message="state.error"
-          @click="openPicker"
           label-align="center"
           class="item"
           style="width: 100%;min-height: 3rem;padding-right: 0.8rem !important;"
+          @click="openPicker"
         />
         <my-field
           ref="field"
@@ -74,17 +74,16 @@
         保存
       </my-button>
 
-      <my-popup
-        v-model:show="showPopup"
-        position="bottom"
-        :style="{ height: '40%' }"
+      <popup
+        v-model="showPopup"
       >
         <picker
           :picker-data="pickerData"
+          :title="'物品类别'"
           @cancel="openPicker"
           @confirm="onSelect"
         />
-      </my-popup>
+      </popup>
     </div>
   </transition>
 </template>
@@ -92,18 +91,18 @@
 <script type="text/ecmascript-6">
 import Head from '../components/head'
 import {reactive} from 'vue'
-import {Button, Field, Popup} from "vant";
+import {Button, Field} from "vant";
 import Picker from '../components/picker'
 import {addMyGood} from '../api/goods'
 import { success } from "../components/success";
-
+import Popup from '../components/popup'
 export default {
   components: {
     MyHead: Head,
     MyButton: Button,
     MyField: Field,
     Picker: Picker,
-    MyPopup: Popup,
+    Popup: Popup,
   },
   setup() {
     const state = reactive({

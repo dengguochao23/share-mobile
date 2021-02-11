@@ -16,7 +16,7 @@
         <div class="select">
           <div class="selectAll">
             <my-checkbox v-model="selectAll">
-              全选
+              <p>全选</p>
             </my-checkbox>
           </div>
           <div
@@ -30,6 +30,7 @@
         <scroll
           ref="scroll"
           class="container"
+          :data="selected"
         >
           <ul>
             <my-checkbox-group
@@ -161,7 +162,7 @@ export default {
       this.showPopup = !this.showPopup
     },
     _refresh(){
-      this.$refs.scroll.refresh()
+      // this.$refs.scroll.refresh()
     },
   }
 }
@@ -173,14 +174,17 @@ export default {
   width 100%
   .list
     position relative
-    padding 10px 5px 0px 5px
+    padding 10px 5px 48px 5px
     height 150px
+
     .head
       fontColor(font_color_minor)
     .select
       display flex
       justify-content space-between
       margin-top 10px
+      p
+        fontColor(font_color_minor)
     .container
       width 100%
       height 100px
@@ -193,6 +197,7 @@ export default {
         display flex
         justify-content space-between
         align-items center
+        fontColor(font_color_minor)
         &.list-enter-active, &.list-leave-active
           transition all 0.5s
         &.list-enter-from, &.list-leave-to
@@ -202,4 +207,5 @@ export default {
           flex 1
           .context
             font-size $font-size-medium
+            fontColor(font_color_minor)
 </style>

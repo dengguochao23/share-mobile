@@ -78,6 +78,8 @@ export default {
   height 2rem
   display flex
   align-items center
+  fontColor(font_color_main)
+
   .num
     margin 0px 10px
 </style>

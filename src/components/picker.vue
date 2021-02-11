@@ -260,6 +260,7 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+@import "../common/stylus/index.styl"
 .picker
   z-index: 100
   width: 100%
@@ -268,25 +269,24 @@ export default {
   text-align: center
   font-size: 14px
   box-sizing content-box
-  background-color: #fff
-
+  bgColor(background_color_main)
   .picker-panel
     z-index: 600
     width: 100%
-    height: 273px
+    height: 233px
 
     .picker-choose
       position: relative
       height: 60px
       color: #999
-
+      bgColor(background_color_minor)
       .picker-title
         margin: 0
         line-height: 60px
         font-weight: normal
         text-align: center
         font-size: 18px
-        color: #333
+        fontColor(font_color_main)
 
       .confirm, .cancel
         position: absolute
@@ -321,12 +321,11 @@ export default {
       .mask-top
         position: absolute
         top: 0
-        background: linear-gradient(to top, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8))
-
+        pickerBgColor(top, picker_color)
       .mask-bottom
         position: absolute
         bottom: 1px
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8))
+        pickerBgColor(bottom, picker_color)
 
       .wheel-wrapper
         padding 0 16px
@@ -349,12 +348,12 @@ export default {
               list-style: none
               overflow: hidden
               white-space: nowrap
-              color: #333
-
+              fontColor(font_color_main)
               &.wheel-disabled-item
                 opacity: .2;
 
     .picker-footer
       height: 20px
+      bgColor(background_color_main)
 
 </style>

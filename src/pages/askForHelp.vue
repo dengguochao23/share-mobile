@@ -19,7 +19,7 @@
       />
     </div>
     <scroll
-      v-show="data.list.length > 0"
+      v-if="data.list.length > 0"
       :data="data.list"
       :total="data.total"
       class="wrapper"
@@ -61,6 +61,7 @@
         </div>
       </section>
     </scroll>
+    <nothing v-else />
     <process
       ref="process"
       class="process"
@@ -79,7 +80,7 @@ import {noramlArray} from "../common/js/util";
 import {loading} from "../components/loading";
 import Scroll from '../components/scroll'
 import Process from '../components/process'
-
+import Nothing from '../components/nothing'
 const normalGood = noramlArray(createGoods)
 export default {
   components: {
@@ -88,7 +89,8 @@ export default {
     Scroll: Scroll,
     MyIcon: Icon,
     MyImage: Image,
-    Process: Process
+    Process: Process,
+    Nothing: Nothing
   },
   setup() {
     const data = reactive({

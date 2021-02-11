@@ -39,6 +39,8 @@ light = {
   // 普通字体颜色
   font_color_main: $color-text
   font_color_minor: $color-text-desc
+  // picker背景颜色
+  picker_color: 255
 }
 dark = {
   name: 'dark',
@@ -52,6 +54,7 @@ dark = {
   // 普通字体颜色
   font_color_main: $color-text-dark,
   font_color_minor: $color-text-desc
+  picker_color: 0
 }
 
 themeList = (light dark)
@@ -71,4 +74,11 @@ fontColor($color)
   for item in themeList
     [data-theme = {item.name}] & {
       color: item[$color];
+    }
+
+pickerBgColor($position ,$color)
+  background: linear-gradient(to $position, rgba(light[$color], light[$color], light[$color], 0.4), rgba(light[$color], light[$color], light[$color], 0.8));
+  for item in themeList
+    [data-theme = {item.name}] & {
+      background: linear-gradient(to $position, rgba(item[$color], item[$color], item[$color], 0.4), rgba(item[$color], item[$color], item[$color], 0.8));
     }

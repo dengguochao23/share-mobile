@@ -6,6 +6,7 @@
       @change="changeTypeToRefreshDirft"
     />
     <my-scroll
+      v-if="data.list.length > 0"
       ref="scroll"
       :data="data.list"
       class="wrapper"
@@ -96,6 +97,7 @@
         </div>
       </section>
     </my-scroll>
+    <nothing v-else />
   </div>
 </template>
 
@@ -109,7 +111,7 @@ import MyScroll from '../components/scroll'
 import {reactive} from 'vue'
 import {Icon, Image, Button} from 'vant'
 import {success} from "../components/success";
-
+import Nothing from '../components/nothing'
 const normalPending = noramlArray(createPending)
 export default {
   name: 'Drift',
@@ -118,7 +120,8 @@ export default {
     MyScroll: MyScroll,
     MyIcon: Icon,
     MyImage: Image,
-    MyButton: Button
+    MyButton: Button,
+    Nothing: Nothing
   },
   setup() {
     const data = reactive({
@@ -153,7 +156,7 @@ export default {
       data.list.splice(0, data.list.length)
       data.total = 0
       data.type = type ? type : data.type
-      await addPage()
+      await getPending(data.type, 1)
     }
     getPending('all', 1)
     return {

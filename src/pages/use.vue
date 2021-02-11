@@ -16,7 +16,10 @@
       class="bg-image"
       :style="bgStyle"
     />
-    <div class="info" ref="info">
+    <div
+      ref="info"
+      class="info"
+    >
       <my-image
         width="7rem"
         height="7rem"
@@ -36,7 +39,7 @@
       class="list"
       :data="data.list"
       :refresh-delay="500"
-      :probeType = "3"
+      :probe-type="3"
       @scroll="scroll"
     >
       <ul class="list-wrapper">
@@ -59,7 +62,11 @@
         </li>
       </ul>
     </scroll>
-    <process class="process" ref="process" :gid="gid"></process>
+    <process
+      ref="process"
+      class="process"
+      :gid="gid"
+    />
   </div>
 </template>
 
@@ -131,25 +138,6 @@ export default {
       return `background-image:url(${this.logo})`
     }
   },
-  mounted() {
-    setTimeout(() => {
-      this.imageHeight = this.$refs.bgImage.clientHeight
-      this.minTransalteY = -this.imageHeight + RESERVED_HEIGHT
-      this.$refs.listGroup.$el.style.top = `${this.imageHeight}px`
-    }, 50)
-  },
-  methods: {
-    back() {
-      this.$router.back()
-    },
-    scroll (pos) {
-      this.scrollY = pos.y
-    },
-    select (good) {
-      this.gid = good.gid
-      this.$refs.process.onShow()
-    }
-  },
   watch: {
     scrollY (newVal) {
       let scale = 1
@@ -178,6 +166,25 @@ export default {
       }
       this.$refs.bgImage.style.transform = `scale(${scale})`
       this.$refs.bgImage.style.zIndex = zIndex
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.imageHeight = this.$refs.bgImage.clientHeight
+      this.minTransalteY = -this.imageHeight + RESERVED_HEIGHT
+      this.$refs.listGroup.$el.style.top = `${this.imageHeight}px`
+    }, 50)
+  },
+  methods: {
+    back() {
+      this.$router.back()
+    },
+    scroll (pos) {
+      this.scrollY = pos.y
+    },
+    select (good) {
+      this.gid = good.gid
+      this.$refs.process.onShow()
     }
   }
 }

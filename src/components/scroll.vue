@@ -20,6 +20,8 @@ import BetterScroll from '@better-scroll/core'
 import Pullup from '@better-scroll/pull-up'
 BetterScroll.use(Pullup)
 const PULLUP_EVENT = 'pullingUp'
+const PULLDOWN_EVENT = 'pullingDown'
+const THRESHOLD = 45 // 下拉的阀值
 const SCROLL_EVENT = 'scroll'
 import {toRefs, watch, onMounted, ref, reactive} from 'vue'
 export default {
@@ -60,6 +62,12 @@ export default {
         return false
       }
     },
+    pullDownLoad: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    },
     // 当滚动超过边缘的时候会有一小段回弹动画
     // 我这里只设置向上的动画
     bounceTop: {
@@ -76,7 +84,8 @@ export default {
   },
   setup(props, _ref){
     const state = reactive({
-      bs: ''
+      bs: '',
+      scrollY: 0
     })
     const root = ref(null)
     const noMore = ref(false)
@@ -98,10 +107,12 @@ export default {
       })
       if (props.pullUpLoad) {
         _initPullup()
-        // this._initScrollEnd()
       }
       if (props.probeType === 3) {
         _initOnscroll()
+      }
+      if (props.pullDownLoad) {
+        _initPullDown()
       }
     }
     function _initPullup () {
@@ -111,7 +122,17 @@ export default {
     }
     function _initOnscroll () {
       state.bs.on('scroll', (pos) => {
+        state.scrollY = pos.y
         emit(SCROLL_EVENT, pos)
+      })
+    }
+    function _initPullDown () {
+      const hooks = state.bs.scroller.hooks
+      hooks.on('end', (position) => {
+        let positionY = position.y
+        if (positionY > THRESHOLD) {
+          emit(PULLDOWN_EVENT)
+        }
       })
     }
     function showNone (data, total) {
@@ -136,6 +157,7 @@ export default {
     watch(total, (newVal) => {
       showNone(data.value, newVal)
     })
+    // 用于监测下拉刷新
     return {
       root,
       state,
