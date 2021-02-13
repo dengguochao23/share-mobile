@@ -1,7 +1,14 @@
 <template>
   <div>
     <foot />
-    <router-view />
+    <router-view v-slot="{ Component }">
+      <keep-alive include="Home,Drift,Main">
+        <component
+          :is="Component"
+          class="view"
+        />
+      </keep-alive>
+    </router-view>
   </div>
 </template>
 

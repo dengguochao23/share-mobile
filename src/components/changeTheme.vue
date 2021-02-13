@@ -1,27 +1,58 @@
 <template>
   <div class="switch">
-    <p>深色</p>
-    <my-switch v-model="change" />
     <p>浅色</p>
+    <my-switch v-model="checked" />
+    <p>深色</p>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import {Switch } from 'vant'
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import {useStore} from "vuex";
+// 在这里我并没有采用缓存来存储深黑模式的切换状态，改为vuex来存储
 export default {
   components: {
     MySwitch: Switch
   },
   setup(){
-    const change = ref(true)
-    watch(change, () => {
+    const store = useStore()
+    const checked = ref(store.getters.darkMode)
+    function initTheme () {
+      let mode = store.getters.darkMode
+      let media = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      // 为true 是 深色模式（深夜模式）
+      if (mode === '') {
+        if(media){
+          checked.value = true
+        }else {
+          checked.value = false
+        }
+      }
+    }
+    function changeTheme (state) {
       let app = document.querySelector('#app')
-      let dataTheme = app.getAttribute('data-theme') ==='light'?'dark':'light'
-      app.setAttribute('data-theme', dataTheme)
+      app.setAttribute('data-theme', state)
+      if (state === 'dark') {
+        store.commit('DARKMODE', true)
+      }
+      if (state === 'light') {
+        store.commit('DARKMODE', false)
+      }
+    }
+    // initTheme()
+    onMounted(()=>{
+      initTheme()
+    })
+    watch(checked, (newVal) => {
+      if (newVal) {
+        changeTheme('dark')
+      } else {
+        changeTheme('light')
+      }
     })
     return {
-      change
+      checked
     }
   }
 }

@@ -110,7 +110,10 @@
               size="2rem"
             />
           </div>
-          <div class="item help">
+          <div
+            class="item help"
+            @click="onHelp"
+          >
             <my-icon
               class="left"
               size="2rem"
@@ -156,6 +159,7 @@
         </div>
         <div class="bottom">
           <my-switch />
+          <p>所有样式均为本人设计以及制作</p>
         </div>
       </section>
     </my-scroll>
@@ -168,6 +172,7 @@ import {computed, ref} from 'vue'
 import Scroll from '../components/scroll'
 import {Image, Divider, Icon} from 'vant'
 import Switch from '../components/changeTheme'
+import {fail} from '../components/fail'
 export default {
   components: {
     MyScroll: Scroll,
@@ -187,7 +192,6 @@ export default {
       await store.dispatch('getUser')
       loading.value = false
     }
-
     return {
       user: computed(() => store.getters.userInfo),
       theme,
@@ -219,6 +223,9 @@ export default {
     },
     onShop() {
       this.$router.push('/shop').catch(err => err)
+    },
+    onHelp() {
+      fail('该功能暂未开放')
     }
   }
 }
@@ -353,7 +360,13 @@ export default {
 
       .bottom
         margin-top: 1.5rem
-
+        height 5rem
+        margin-bottom 1rem
+        p
+          text-align center
+          margin-top 1rem
+          font-size $font-size-small
+          fontColor(font_color_minor)
 @keyframes load
   0%
     opacity: 1

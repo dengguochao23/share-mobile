@@ -9,6 +9,9 @@ const mutations = {
   },
   [types.MYSHOP]: (state, myShop) => {
     state.myShop = myShop
+  },
+  [types.DARKMODE]: (state, darkMode) => {
+    state.darkMode = darkMode
   }
 }
 

@@ -80,7 +80,6 @@ import {useStore} from "vuex";
 import {Icon, CheckboxGroup, Checkbox} from 'vant'
 import {computed, ref, watch} from 'vue'
 const CHECKED_EVENT = 'change'
-// const MAX_LIST_HEIGHT = 100
 export default {
   components: {
     Popup: Popup,
