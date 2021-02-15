@@ -47,12 +47,13 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {Button, Field, Toast} from 'vant'
+import {Button, Field} from 'vant'
 import {reactive, watch} from 'vue'
 import {mapActions} from 'vuex'
 import {checkUser} from '../api/user'
 import {registers} from '../api/client'
-
+import {loading} from '../components/loading'
+import {fail} from '../components/fail'
 export default {
   components: {
     myButton: Button,
@@ -111,10 +112,7 @@ export default {
         secret: state.secret,
         type: 100
       }
-      Toast.loading({
-        message: '加载中...',
-        forbidClick: true
-      })
+      loading()
       checkUser('account', info.account).then(() => {
         this._login(info)
       }).catch(() => {
@@ -127,9 +125,9 @@ export default {
       this.toLogin(info).then(() => {
         this.$router.push('/')
       }).catch(() => {
-        Toast.fail('密码错误')
+        fail('密码错误')
       })
-      Toast.clear()
+      loading.close()
     },
     isShowPassword() {
       this.isShow = !this.isShow

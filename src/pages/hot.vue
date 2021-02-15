@@ -32,7 +32,7 @@
     >
       <ul ref="listGroup">
         <li
-          v-for="(use,index) in data.list"
+          v-for="(use,index) in list"
           :key="use.uid"
           class="item"
           @click="onSelect(use)"
@@ -129,6 +129,13 @@ export default {
       pages: 0,
       myRank: '',
     })
+    // 进一步提升了熏染速度
+    const list = computed({
+      get: () => data.list,
+      set: val => {
+        data.list.push(...val)
+      }
+    })
     const page = toRef(data, 'page')
     function addPage() {
       if (data.page === data.pages || data.list.length % 200 === 0) {
@@ -146,7 +153,7 @@ export default {
     function _getAllUserByPage(page) {
       loading()
       getAllUser(page).then(res => {
-        data.list.push(...normalUser(res.data.data))
+        list.value = normalUser(res.data.data)
         data.page = res.data.page
         data.pageArray.push(res.data.page)
         data.pages = res.data.pages
@@ -169,6 +176,7 @@ export default {
       addPage,
       nextPage,
       page,
+      list,
       use: computed(() => store.getters.userInfo)
     }
   },

@@ -2,7 +2,7 @@
   <div>
     <foot />
     <router-view v-slot="{ Component }">
-      <keep-alive include="Home,Drift,Main">
+      <keep-alive include="Home,Drift,Main,Hot">
         <component
           :is="Component"
           class="view"
