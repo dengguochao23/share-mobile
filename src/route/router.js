@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory} from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import store from '../store/index'
 import Error from '../common/js/error'
 
@@ -17,10 +17,9 @@ const error = new Error()
 if (process.env.NODE_ENV === 'production') {
     error.init()
 }
-
+const base = process.env.NODE_ENV === 'production' ? '/mobile/' : '/'
 const router = createRouter({
-    base: process.env.NODE_ENV === 'production' ? '/mobile/' : '/',
-    history: createWebHashHistory(),
+    history: createWebHistory(base),
     routes: [
         {
             path: '/:pathMatch(.*)*',
