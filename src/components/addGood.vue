@@ -73,7 +73,7 @@
       >
         保存
       </my-button>
-
+      <cover v-model="showPopup" />
       <popup
         v-model="showPopup"
       >
@@ -96,6 +96,7 @@ import Picker from '../components/picker'
 import {addMyGood} from '../api/goods'
 import { success } from "../components/success";
 import Popup from '../components/popup'
+import Cover from '../components/cover'
 export default {
   components: {
     MyHead: Head,
@@ -103,6 +104,7 @@ export default {
     MyField: Field,
     Picker: Picker,
     Popup: Popup,
+    Cover: Cover
   },
   setup() {
     const state = reactive({

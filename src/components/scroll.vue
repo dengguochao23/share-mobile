@@ -164,10 +164,6 @@ export default {
       noMore
     }
   },
-  data () {
-    return {
-    }
-  },
   methods: {
     // 下拉刷新后一定要执行这步
     finishPullUp() {

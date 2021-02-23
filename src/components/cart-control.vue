@@ -1,16 +1,16 @@
 <template>
   <div class="cart-control-wrapper">
     <my-icon
-      v-show="num > 0"
+      v-show="count > 0"
       color="#1B91F3"
       name="close"
       @click="reduce"
     />
     <p
-      v-show="num > 0"
+      v-show="count > 0"
       class="num"
     >
-      {{ num }}
+      {{ count }}
     </p>
     <my-icon
       color="#1B91F3"
@@ -22,7 +22,7 @@
 
 <script type="text/ecmascript-6">
 import {Icon} from 'vant'
-import {ref, watch, toRefs} from 'vue'
+import {toRefs} from 'vue'
 const ADD_EVENT = 'add'
 const REDUCE_EVENT = 'reduce'
 export default {
@@ -45,26 +45,32 @@ export default {
   },
   setup(props, _ref) {
     const {count, max} = toRefs(props)
-    const num = ref(count)
+    // const num = toRef(count)
+    // const num = computed({
+    //   get: () => count.value,
+    //   set: val => {
+    //     count.value = val
+    //   }
+    // })
     const emit = _ref.emit
     function reduce () {
-      num.value --
-      emit(REDUCE_EVENT, num.value)
+      // num.value --
+      emit(REDUCE_EVENT)
     }
     function add() {
-      if (num.value === max.value) {
+      if (count.value === max.value) {
         return
       }
-      num.value ++
-      emit(ADD_EVENT, num.value)
+      // num.value ++
+      emit(ADD_EVENT)
     }
-    watch(count, (newVal) => {
-      num.value = newVal
-    })
+    // watch(count, (newVal) => {
+    //   // num.value = newVal
+    // })
 
     return {
       add,
-      num,
+      // num,
       reduce
     }
   }

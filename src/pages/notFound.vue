@@ -1,7 +1,9 @@
 <template>
   <div class="notFound">
     <div class="notFound-wrapper">
-      <p>404...</p>
+      <p>
+        404...
+      </p>
     </div>
     <p
       class="but"
@@ -13,6 +15,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+
 export default {
   name: 'NotFound',
   methods: {
@@ -51,4 +54,13 @@ export default {
     font-weight 700
     transform translate3d(-50%, 0 ,0)
     cursor pointer
+
+  .list-item
+    display: inline-block;
+    margin-right: 10px;
+    &.list-enter-active,&.list-leave-active
+      transition: all 1s ease;
+    &.list-enter-from,&.list-leave-to
+      opacity: 0;
+      transform: translateY(30px);
 </style>

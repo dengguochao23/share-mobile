@@ -5,99 +5,101 @@
       :tabs="tabs"
       @change="changeTypeToRefreshDirft"
     />
-    <my-scroll
-      v-if="data.list.length > 0"
-      ref="scroll"
-      :data="data.list"
-      class="wrapper"
-      :total="data.total"
-      :pull-up-load="true"
-      :refresh-delay="100"
-      @pullingUp="addPage"
-    >
-      <section>
-        <div
-          v-for="good in data.list"
-          :key="good.id"
-          class="item"
-        >
-          <div class="head">
-            <div class="user">
-              <my-icon name="contact" />
-              <p class="name">
-                {{ good.youare == 'helper' ? '我是求助者' : '我是分享者' }}
+    <div class="wrapper">
+      <my-scroll
+        v-if="data.list.length > 0"
+        ref="scroll"
+        :data="data.list"
+        class="list"
+        :total="data.total"
+        :pull-up-load="true"
+        :refresh-delay="100"
+        @pullingUp="addPage"
+      >
+        <section>
+          <div
+            v-for="good in data.list"
+            :key="good.id"
+            class="item"
+          >
+            <div class="head">
+              <div class="user">
+                <my-icon name="contact" />
+                <p class="name">
+                  {{ good.youare == 'helper' ? '我是求助者' : '我是分享者' }}
+                </p>
+              </div>
+              <p class="status">
+                {{ good.req }}
               </p>
             </div>
-            <p class="status">
-              {{ good.req }}
-            </p>
-          </div>
-          <div class="container">
-            <my-image
-              radius="10"
-              width="80"
-              height="80"
-            />
-            <div class="content">
-              <p>{{ good.name }}/{{ good.specification }}/{{ good.detail }}</p>
+            <div class="container">
+              <my-image
+                radius="10"
+                width="80"
+                height="80"
+              />
+              <div class="content">
+                <p>{{ good.name }}/{{ good.specification }}/{{ good.detail }}</p>
+              </div>
             </div>
-          </div>
-          <div class="bottom">
-            <p>{{ good.time }}</p>
-            <div
-              v-if="good.youare==='helper'"
-              class="helper"
-            >
-              <my-button
-                v-if="good.pending===1"
-                type="danger"
-                size="mini"
-                round
-                style="padding: 0 5px"
-                @click.stop="onCancalDrift(good.gid)"
+            <div class="bottom">
+              <p>{{ good.time }}</p>
+              <div
+                v-if="good.youare==='helper'"
+                class="helper"
               >
-                撤销
-              </my-button>
-              <my-button
-                v-if="good.pending===6"
-                size="mini"
-                round
-                style="padding: 0 5px"
-                @click.stop="onOpenComment(good.gid)"
-              >
-                评价
-              </my-button>
-            </div>
-            <div
-              v-else
-              class="sharer"
-            >
-              <div v-if="good.pending==1">
                 <my-button
-                  type="primary"
-                  size="mini"
-                  round
-                  style="padding: 0 5px"
-                  @click.stop="onSubmitReview(good.id,good.gid,good.youare,2)"
-                >
-                  审核通过
-                </my-button>
-                <my-button
+                  v-if="good.pending===1"
                   type="danger"
                   size="mini"
                   round
                   style="padding: 0 5px"
-                  @click.stop="onSubmitReview(good.id,good.gid,good.youare,4)"
+                  @click.stop="onCancalDrift(good.gid)"
                 >
-                  审核不通过
+                  撤销
                 </my-button>
+                <my-button
+                  v-if="good.pending===6"
+                  size="mini"
+                  round
+                  style="padding: 0 5px"
+                  @click.stop="onOpenComment(good.gid)"
+                >
+                  评价
+                </my-button>
+              </div>
+              <div
+                v-else
+                class="sharer"
+              >
+                <div v-if="good.pending==1">
+                  <my-button
+                    type="primary"
+                    size="mini"
+                    round
+                    style="padding: 0 5px"
+                    @click.stop="onSubmitReview(good.id,good.gid,good.youare,2)"
+                  >
+                    审核通过
+                  </my-button>
+                  <my-button
+                    type="danger"
+                    size="mini"
+                    round
+                    style="padding: 0 5px"
+                    @click.stop="onSubmitReview(good.id,good.gid,good.youare,4)"
+                  >
+                    审核不通过
+                  </my-button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-    </my-scroll>
-    <nothing v-else />
+        </section>
+      </my-scroll>
+      <nothing v-else />
+    </div>
   </div>
 </template>
 
@@ -225,59 +227,64 @@ export default {
     left 0
     bottom 3rem
     right 0
+    .list
+      position absolute
+      top 0
+      left 0
+      width 100%
+      height 100%
+      .item
+        width 95%
+        min-height: 10rem;
+        bgColor(background_color_minor)
+        fontColor(font_color_main)
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+        border-radius: 10px;
+        margin: 0 auto;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        font-size: $font-size-small;
 
-    .item
-      width 95%
-      min-height: 10rem;
-      bgColor(background_color_minor)
-      fontColor(font_color_main)
-      box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-      border-radius: 10px;
-      margin: 0 auto;
-      margin-top: 15px;
-      margin-bottom: 15px;
-      font-size: $font-size-small;
-
-      .head
-        height: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-left: 15px;
-        margin-right: 15px;
-        border-bottom: 1px solid #DCDFE6;
-
-        .user
+        .head
+          height: 2rem;
           display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-left: 15px;
+          margin-right: 15px;
+          border-bottom: 1px solid #DCDFE6;
+
+          .user
+            display: flex;
+            align-items: center;
+
+          .status
+            color #F56C6C
+
+        .container
+          display: flex;
+          margin: 15px 10px 0 10px;
           align-items: center;
 
-        .status
-          color #F56C6C
+          .content
+            lex: 1;
+            width: 200px;
+            font-size: $font-size-medium;
+            margin-left: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
 
-      .container
-        display: flex;
-        margin: 15px 10px 0 10px;
-        align-items: center;
+        .bottom
+          display: flex;
+          justify-content: space-between;
+          height: 50px;
+          align-items: center;
+          margin-left: 15px;
+          margin-right: 15px;
 
-        .content
-          lex: 1;
-          width: 200px;
-          font-size: $font-size-medium;
-          margin-left: 20px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-
-      .bottom
-        display: flex;
-        justify-content: space-between;
-        height: 50px;
-        align-items: center;
-        margin-left: 15px;
-        margin-right: 15px;
-
-        p
-          flex 1
+          p
+            flex 1
 </style>

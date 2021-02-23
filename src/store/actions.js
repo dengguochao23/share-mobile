@@ -74,21 +74,18 @@ export const cutShop = function ({ commit, state }, shop) {
   let sameforshopofIndex = currentShop.findIndex((s) => {
     return s.id === shop.id
   })
-  if (sameforshopofIndex >= 0) {
-    let current = currentShop[sameforshopofIndex] // 拿到当前物品
-    let num = current.num
-    num--
-    if (num < 1) {
-      currentShop.splice(sameforshopofIndex, 1)
-    } else {
-      current.num = num
-    }
-  }
+  let current = currentShop[sameforshopofIndex] // 拿到当前物品
+  let num = current.num
+  num--
+  current.num = num
   commit(types.MYSHOP, currentShop)
 }
 
-export const deleteShop = function ({ commit, state }, index) {
+export const deleteShop = function ({ commit, state }, shop) {
   let currentShop = state.myShop.slice()
-  currentShop.splice(index, 1)
+  let sameforshopofIndex = currentShop.findIndex((s) => {
+    return s.id === shop.id
+  })
+  currentShop.splice(sameforshopofIndex, 1)
   commit(types.MYSHOP, currentShop)
 }

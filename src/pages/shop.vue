@@ -55,6 +55,7 @@
     <cart-list
       ref="cartList"
       class="cart-list"
+      :list="shop"
       @change="selectShop"
     />
     <div class="shop-cart">
@@ -111,7 +112,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {reactive, ref, toRef, computed, toRaw} from 'vue'
+import {reactive, ref, toRef, computed, toRaw, watch} from 'vue'
 import MyHead from '../components/head'
 import Sidebar from '../components/sidebar'
 import Scroll from '../components/scroll'
@@ -155,7 +156,7 @@ export default {
     })
     const root = ref(null)
     const list = toRef(data, 'list')
-
+    const shop = computed(() => store.getters.myShop)
     async function _init() {
       await _getAllShop(1)
       await _getAllShop(2)
@@ -174,10 +175,14 @@ export default {
       store.dispatch('addShop',shop)
     }
     function cutShopCart (shop) {
-      store.dispatch('cutShop',shop)
+      if(shop.num === 1) {
+        store.dispatch('deleteShop', shop)
+      } else {
+        store.dispatch('cutShop', shop)
+      }
     }
     function selectShop (select){
-      data.selected = [...select]
+      data.selected = select
     }
     function submit () {
       let torawdata = toRaw(data)
@@ -207,6 +212,11 @@ export default {
         fail(meg)
       })
     }
+    watch(shop, (newVal) => {
+      newVal.forEach((i) => {
+        data.selected.push(i.id)
+      })
+    })
     _init()
     return {
       data,
@@ -218,7 +228,7 @@ export default {
       totalPrice: computed(()=> Object.keys(store.getters.myShop).reduce((pre, cur)=>{
         return pre + (store.getters.myShop[cur].num * store.getters.myShop[cur].price)
       },0)),
-      shop: computed(() => store.getters.myShop),
+      shop,
       addShop,
       cutShopCart,
       selectShop,
@@ -260,7 +270,7 @@ export default {
         fail('购物车为空')
         return
       }
-      this.$refs.cartList.show()
+      this.$refs.cartList.openShopCart()
     },
     // 快速滚动
     scrollTo (item) {

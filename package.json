@@ -12,8 +12,7 @@
     "@better-scroll/pull-up": "^2.1.0",
     "@better-scroll/wheel": "^2.1.1",
     "core-js": "^3.6.5",
-    "moment": "2.24.0",
-    "vue": "^3.0.0"
+    "moment": "2.24.0"
   },
   "devDependencies": {
     "@better-scroll/core": "^2.0.6",
@@ -34,6 +33,7 @@
     "stylus": "^0.54.8",
     "stylus-loader": "^3.0.2",
     "vant": "^3.0.0-rc.3",
+    "vue": "^3.0.5",
     "vue-router": "^4.0.1",
     "vuex": "^4.0.0-rc.2"
   },

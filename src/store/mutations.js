@@ -12,6 +12,9 @@ const mutations = {
   },
   [types.DARKMODE]: (state, darkMode) => {
     state.darkMode = darkMode
+  },
+  [types.LIST]: (state, list) => {
+    state.list = list
   }
 }
 

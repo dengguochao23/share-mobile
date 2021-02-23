@@ -4,7 +4,6 @@
     <popup
       v-model="showPopup"
       :bottom="51"
-      @transitionend="_refresh"
     >
       <div
         ref="list"
@@ -28,43 +27,42 @@
           </div>
         </div>
         <scroll
-          ref="scroll"
+          ref="cartListScroll"
           class="container"
-          :data="selected"
         >
-          <ul>
-            <my-checkbox-group
-              ref="checkboxGroup"
-              v-model="selected"
+          <my-checkbox-group
+            ref="checkboxGroup"
+            v-model="checked"
+            @change="selected"
+          >
+            <transition-group
+              name="list"
+              tag="ul"
+              @after-leave="onRefresh"
             >
-              <transition-group
-                name="list"
-                tag="li"
+              <li
+                v-for="item in list"
+                :key="item.id"
+                class="item"
               >
-                <li
-                  v-for="(item, index) in list"
-                  :key="index"
-                  class="item"
+                <my-checkbox
+                  class="checkbox"
+                  :name="item.id"
                 >
-                  <my-checkbox
-                    class="checkbox"
-                    :name="item.id"
-                  >
-                    <p class="context">
-                      {{ item.name }} {{ item.price * item.num }} 豆
-                    </p>
-                  </my-checkbox>
-                  <my-cart-control
-                    class="cart-control"
-                    :count="item.num"
-                    :max="item.stock"
-                    @add="addShopCart(item)"
-                    @reduce="cutShopCart(item)"
-                  />
-                </li>
-              </transition-group>
-            </my-checkbox-group>
-          </ul>
+                  <p class="context">
+                    {{ item.name }} {{ item.price * item.num }} 豆
+                  </p>
+                </my-checkbox>
+                <my-cart-control
+                  class="cart-control"
+                  :count="item.num"
+                  :max="item.stock"
+                  @add="addShopCart(item)"
+                  @reduce="cutShopCart(item)"
+                />
+              </li>
+            </transition-group>
+          </my-checkbox-group>
         </scroll>
       </div>
     </popup>
@@ -72,97 +70,108 @@
 </template>
 
 <script type="text/ecmascript-6">
-import Popup from '../components/popup'
 import Cover from '../components/cover'
+import Popup from '../components/popup'
 import Scroll from '../components/scroll'
 import CartControl from '../components/cart-control'
 import {useStore} from "vuex";
 import {Icon, CheckboxGroup, Checkbox} from 'vant'
 import {computed, ref, watch} from 'vue'
+
 const CHECKED_EVENT = 'change'
 export default {
   components: {
-    Popup: Popup,
     Cover: Cover,
+    Popup: Popup,
     Scroll: Scroll,
     MyIcon: Icon,
     MyCartControl: CartControl,
     MyCheckboxGroup: CheckboxGroup,
     MyCheckbox: Checkbox,
   },
-  props: {},
+  props: {
+    list: {
+      type: Array,
+      default () {
+        return []
+      }
+    }
+  },
   setup(props, _ref) {
     const emit = _ref.emit
     const store = useStore()
     const selectAll = ref(false)
-    const selected = ref([]);
+    const checked = ref([]);
     const checkboxGroup = ref(null);
     function addShopCart(shop) {
       store.dispatch('addShop', shop)
     }
 
     function cutShopCart(shop) {
-      store.dispatch('cutShop', shop)
+      if(shop.num === 1) {
+        store.dispatch('deleteShop', shop)
+      } else {
+        store.dispatch('cutShop', shop)
+      }
     }
-    function cleanALL () {
+    function cleanALL() {
       store.dispatch('cleanShop')
     }
-    function checkAll () {
+
+    function checkAll() {
       checkboxGroup.value.toggleAll(true);
     }
-    function toggleAll () {
+
+    function toggleAll() {
       checkboxGroup.value.toggleAll();
     }
-
-    watch(selected, (newValue) => {
-      emit(CHECKED_EVENT, newValue)
-    })
+    function selected (event) {
+      let temp = []
+       event.forEach(i => {
+         temp.push(i)
+       })
+      emit(CHECKED_EVENT, temp)
+    }
     watch(selectAll, (newValue) => {
-      if (newValue){
+      if (newValue) {
         checkAll()
       } else {
         toggleAll()
       }
     })
     return {
-      list: computed(() => store.getters.myShop),
       user: computed(() => store.getters.userInfo),
       addShopCart,
       cutShopCart,
       selectAll,
       cleanALL,
       selected,
-      checkboxGroup,
+      checked,
+      checkboxGroup
     }
   },
   data() {
     return {
-      showPopup: false
+      showPopup: false,
     }
   },
   watch: {
-    list(newVal){
-      let temp =[]
-      for (let i in newVal){
+    list(newVal) {
+      let temp = []
+      for (let i in newVal) {
         let item = newVal[i]
         temp.push(item.id)
       }
-      this.selected = temp
+      this.checked = temp
     },
-    selected (newValue) {
-      if (newValue.length === 0) {
-        this.show()
-      }
-      this._refresh()
-    }
   },
   methods: {
-    show() {
+    openShopCart() {
       this.showPopup = !this.showPopup
     },
-    _refresh(){
-      // this.$refs.scroll.refresh()
-    },
+    onRefresh() {
+      this.$refs.cartListScroll.refresh()
+    }
   }
 }
 </script>
@@ -171,6 +180,7 @@ export default {
 @import "../common/stylus/index.styl"
 .shopCartList-wrapper
   width 100%
+
   .list
     position relative
     padding 10px 5px 48px 5px
@@ -178,12 +188,15 @@ export default {
 
     .head
       fontColor(font_color_minor)
+
     .select
       display flex
       justify-content space-between
       margin-top 10px
+
       p
         fontColor(font_color_minor)
+
     .container
       width 100%
       height 100px
@@ -191,19 +204,25 @@ export default {
       top 70px
       left 5px
       overflow hidden
+
       .item
+        width 100%
         height 30px
         display flex
         justify-content space-between
         align-items center
         fontColor(font_color_minor)
+
         &.list-enter-active, &.list-leave-active
-          transition all 0.5s
+          transition all 0.3s ease
+
         &.list-enter-from, &.list-leave-to
-          opacity: 0;
+          opacity 0
+
         .checkbox
           width 200px
           flex 1
+
           .context
             font-size $font-size-medium
             fontColor(font_color_minor)
