@@ -94,7 +94,6 @@ import {reactive} from 'vue'
 import {Button, Field} from "vant";
 import Picker from '../components/picker'
 import {addMyGood} from '../api/goods'
-import { success } from "../components/success";
 import Popup from '../components/popup'
 import Cover from '../components/cover'
 export default {
@@ -149,7 +148,7 @@ export default {
         detail: this.state.detail
       }
       addMyGood(good).then(() => {
-        success()
+        this.$success()
         this.onShow()
       })
     }

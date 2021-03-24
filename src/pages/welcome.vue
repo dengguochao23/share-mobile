@@ -52,8 +52,6 @@ import {reactive, watch} from 'vue'
 import {mapActions} from 'vuex'
 import {checkUser} from '../api/user'
 import {registers} from '../api/client'
-import {loading} from '../components/loading'
-import {fail} from '../components/fail'
 export default {
   components: {
     myButton: Button,
@@ -112,7 +110,7 @@ export default {
         secret: state.secret,
         type: 100
       }
-      loading()
+      this.$loading()
       checkUser('account', info.account).then(() => {
         this._login(info)
       }).catch(() => {
@@ -125,9 +123,9 @@ export default {
       this.toLogin(info).then(() => {
         this.$router.push('/')
       }).catch(() => {
-        fail('密码错误')
+        this.$fail('密码错误')
       })
-      loading.close()
+      this.$loading.close()
     },
     isShowPassword() {
       this.isShow = !this.isShow

@@ -105,7 +105,6 @@ import {getAllUser, ranking} from '../api/user'
 import {reactive, onBeforeMount, toRef, computed} from 'vue'
 import {noramlArray} from "../common/js/util";
 import {createUser} from "../model/user";
-import {loading} from "../components/loading";
 import Scroll from '../components/scroll'
 import {getData} from '../common/js/dom'
 import {useStore} from 'vuex'
@@ -151,14 +150,14 @@ export default {
       _getAllUserByPage(data.page)
     }
     function _getAllUserByPage(page) {
-      loading()
+      this.$loading()
       getAllUser(page).then(res => {
         list.value = normalUser(res.data.data)
         data.page = res.data.page
         data.pageArray.push(res.data.page)
         data.pages = res.data.pages
       }).then(() => {
-        loading.close()
+        this.$loading.close()
       })
     }
 

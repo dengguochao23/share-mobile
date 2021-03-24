@@ -24,7 +24,7 @@ let instanceCache;
 let root = document.createElement('div')
 root.setAttribute('id', 'my')
 // 监测主题颜色变化
-function wathTheme () {
+function watchTheme () {
   let app = document.body.querySelector('#app')
   let theme = app.getAttribute('data-theme') === 'light'? 'light': 'dark'
   if (theme === 'dark') {
@@ -36,7 +36,7 @@ function wathTheme () {
 // 挂载节点
 function mountComponent(arg) {
   if (!instanceCache) {
-    wathTheme()
+    watchTheme()
     instanceCache = createApp(Success)
     let text = arg[0]?arg[0]:DEFAULT
     instanceCache.provide('text', text)

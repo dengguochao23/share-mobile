@@ -172,7 +172,6 @@ import {computed, ref} from 'vue'
 import Scroll from '../components/scroll'
 import {Image, Divider, Icon} from 'vant'
 import Switch from '../components/changeTheme'
-import {fail} from '../components/fail'
 export default {
   components: {
     MyScroll: Scroll,
@@ -225,7 +224,7 @@ export default {
       this.$router.push('/shop').catch(err => err)
     },
     onHelp() {
-      fail('该功能暂未开放')
+      this.$fail('该功能暂未开放')
     }
   }
 }

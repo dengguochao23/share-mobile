@@ -77,7 +77,6 @@ import {reactive} from 'vue'
 import {searchGood} from '../api/search'
 import {createGoods} from '../model/good'
 import {noramlArray} from "../common/js/util";
-import {loading} from "../components/loading";
 import Scroll from '../components/scroll'
 import Process from '../components/process'
 import Nothing from '../components/nothing'
@@ -112,13 +111,13 @@ export default {
     function onSearch() {
       data.list.splice(0, data.list.length) // 清空数组
       data.total = 0
-      loading()
+      this.$loading()
       searchGood(data.search, 1).then(res => {
         data.list.push(...normalGood(res.data.data))
         data.page = res.data.page
         data.total = res.data.total
       }).then(() => {
-        loading.close()
+        this.$loading.close()
       })
     }
 
@@ -128,7 +127,7 @@ export default {
         data.page = res.data.page
         data.total = res.data.total
       }).then(() => {
-        loading.close()
+        this.$loading.close()
       })
     }
     return {

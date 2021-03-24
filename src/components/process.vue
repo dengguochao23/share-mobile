@@ -142,8 +142,6 @@ import {checkDriftByid, createDriftFromHelper, cancalDriftByid} from '../api/dri
 import {createGoods} from '../model/good'
 import {createComments} from '../model/comment'
 import {noramlArray} from "../common/js/util";
-import {success} from "../components/success";
-import {fail} from "../components/fail";
 
 const STEP = {
   0: {
@@ -252,18 +250,18 @@ export default {
 
     function onSubmitReview() {
       createDriftFromHelper(gid.value, data.good.name, data.user.id, 5).then(() => {
-        success('提交成功')
+        this.$success('提交成功')
         state.status = STEP[1].status
         state.next = STEP[1].next
         state.nextinfo = STEP[1].nextinfo
       }).catch(() => {
-        fail('提交失败')
+        this.$fail('提交失败')
       })
     }
 
     function onCancelDrift() {
       cancalDriftByid(gid.value).then(() => {
-        success('撤销成功')
+        this.$success('撤销成功')
         _checkDriftById(gid.value)
       })
     }

@@ -91,7 +91,6 @@ import {Button, Image} from 'vant'
 import {noramlArray} from "../common/js/util";
 import {getMyGoods} from "../api/goods";
 import {createGoods} from "../model/good"
-import {loading} from '../components/loading'
 import {handleMyGood} from '../api/goods'
 import Scroll from '../components/scroll'
 import Head from '../components/head'
@@ -125,13 +124,13 @@ export default {
       getMyGoodsByPage(1)
     })
     function getMyGoodsByPage(page) {
-      loading()
+      this.$loading()
       getMyGoods(page).then(res => {
         data.list.push(...normalGoods(res.data.data))
         data.page = res.data.page
         data.total = res.data.total
       }).then(()=>{
-        loading.close()
+        this.$loading.close()
       })
     }
     async function freshState () {

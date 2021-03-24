@@ -122,8 +122,6 @@ import {Image, Icon, Button} from 'vant'
 import {useStore} from "vuex";
 import CartList from '../components/shopCartList'
 import {sellMyShop} from '../api/shop'
-import {success} from '../components/success'
-import {fail} from '../components/fail'
 const BALL_LEN = 10 // 设置球子的数量
 const innerClsHook = 'inner-hook'
 function createBalls() {
@@ -189,7 +187,7 @@ export default {
       let shop = store.getters.myShop
       // 判断购物车为空
       if (shop.length ===0 ) {
-        fail('购物车为空')
+        this.$fail('购物车为空')
         return
       }
       let temp = []
@@ -206,10 +204,10 @@ export default {
         }
       }
       sellMyShop(temp).then(()=>{
-        success('兑换成功')
+        this.$success('兑换成功')
       }).catch((rej) => {
         let meg = rej.data.meg
-        fail(meg)
+        this.$fail(meg)
       })
     }
     watch(shop, (newVal) => {
@@ -267,7 +265,7 @@ export default {
     },
     showList() {
       if (this.shop.length === 0) {
-        fail('购物车为空')
+        this.$fail('购物车为空')
         return
       }
       this.$refs.cartList.openShopCart()

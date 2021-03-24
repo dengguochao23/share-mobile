@@ -11,9 +11,8 @@
 
 <script type="text/ecmascript-6">
 import {createApp} from 'vue'
-
 const Loading = {
-  name: 'toast',
+  name: 'loading',
   data() {
     return {
       visible: true,
@@ -21,14 +20,13 @@ const Loading = {
     }
   },
 }
-
 export default Loading
 let instanceCache;
 // 创建节点
 let root = document.createElement('div')
 root.setAttribute('id', 'my')
 // 监测主题颜色变化
-function wathTheme () {
+function watchTheme () {
   let app = document.body.querySelector('#app')
   let theme = app.getAttribute('data-theme') === 'light'? 'light': 'dark'
   if (theme === 'dark') {
@@ -40,8 +38,7 @@ function wathTheme () {
 // 挂载节点
 function mountComponent() {
   if (!instanceCache) {
-    wathTheme()
-
+    watchTheme()
     instanceCache = createApp(Loading)
     document.body.appendChild(root);
     instanceCache.mount('#my')

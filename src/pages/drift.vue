@@ -107,12 +107,10 @@
 import Tabs from '../components/tabs'
 import {pending, handlePending, cancalDriftByid} from '../api/drift'
 import {createPending} from '../model/pending'
-import {loading} from "../components/loading";
 import {noramlArray} from "../common/js/util";
 import MyScroll from '../components/scroll'
 import {reactive} from 'vue'
 import {Icon, Image, Button} from 'vant'
-import {success} from "../components/success";
 import Nothing from '../components/nothing'
 const normalPending = noramlArray(createPending)
 export default {
@@ -142,14 +140,14 @@ export default {
     }
 
     function getPending(type, page) {
-      loading()
+      this.$loading()
       pending(page, type).then(res => {
         data.total = res.data.total
         data.list.push(...normalPending(res.data.data))
         data.page = res.data.page
         data.type = type
       }).then(() => {
-        loading.close()
+        this.$loading.close()
       })
     }
 
@@ -192,7 +190,7 @@ export default {
     },
     onCancalDrift(gid) {
       cancalDriftByid(gid).then(() => {
-        success()
+        this.$success()
         this.refreshState()
       })
     },
@@ -201,7 +199,7 @@ export default {
     },
     onSubmitReview(id, gid, youare, pending) {
       handlePending(id, gid, youare, pending).then(() => {
-        success()
+        this.$success()
         this.refreshState()
       })
     }

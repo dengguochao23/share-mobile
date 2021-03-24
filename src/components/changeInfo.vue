@@ -105,8 +105,6 @@
 
 <script type="text/ecmascript-6">
 import {Button, Field} from 'vant'
-import {success} from "../components/success";
-import {fail} from "../components/fail";
 import Head from '../components/head'
 import {reactive, watch, toRef, ref} from 'vue'
 import {saveUserByEmail, saveUserByRoom, saveUserByMobile} from '../api/user'
@@ -214,7 +212,7 @@ export default {
   methods: {
     onSubmit(state) {
       if (this._validate(state) || state.error.length > 0) {
-        fail()
+        this.$fail()
       } else {
         if (state.tel) {
           this._promiseFn(saveUserByMobile(state.tel))
@@ -234,11 +232,11 @@ export default {
     },
     _promiseFn(fn) {
       fn.then(() => {
-        success()
+        this.$success()
         this.getUser()
         this.onClose()
       }).catch(() => {
-        fail()
+        this.$fail()
       })
     },
     _validate(data) {
