@@ -97,6 +97,7 @@ import Head from '../components/head'
 import AddGood from '../components/addGood'
 import Nothing from '../components/nothing'
 const normalGoods = noramlArray(createGoods)
+import {loading} from '../plugin/loading'
 export default {
   name: 'GoodList',
   components: {
@@ -113,6 +114,7 @@ export default {
       page: 0,
       total: 0
     })
+
     function addPage() {
       if (data.list.length >= data.total) {
         return
@@ -124,13 +126,13 @@ export default {
       getMyGoodsByPage(1)
     })
     function getMyGoodsByPage(page) {
-      this.$loading()
+      loading()
       getMyGoods(page).then(res => {
         data.list.push(...normalGoods(res.data.data))
         data.page = res.data.page
         data.total = res.data.total
       }).then(()=>{
-        this.$loading.close()
+        loading.close()
       })
     }
     async function freshState () {

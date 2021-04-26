@@ -37,11 +37,11 @@ function watchTheme () {
 function mountComponent(arg) {
   if (!instanceCache) {
     watchTheme()
-    instanceCache = createApp(Success)
+    instanceCache = createApp(Success) // 构建应用上下文的应用实例
     let text = arg[0]?arg[0]:DEFAULT
-    instanceCache.provide('text', text)
-    document.body.appendChild(root);
-    instanceCache.mount('#my')
+    instanceCache.provide('text', text) // 外部注入到组件的值
+    document.body.appendChild(root); // 本根节点添加到body
+    instanceCache.mount('#my') // 挂载组件
   }
 }
 

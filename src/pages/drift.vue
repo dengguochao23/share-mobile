@@ -113,6 +113,7 @@ import {reactive} from 'vue'
 import {Icon, Image, Button} from 'vant'
 import Nothing from '../components/nothing'
 const normalPending = noramlArray(createPending)
+import {loading} from '../plugin/loading'
 export default {
   name: 'Drift',
   components: {
@@ -130,7 +131,6 @@ export default {
       total: 0,
       type: ''
     })
-
     function addPage() {
       if (data.list.length >= data.total) {
         return
@@ -140,14 +140,14 @@ export default {
     }
 
     function getPending(type, page) {
-      this.$loading()
+      loading()
       pending(page, type).then(res => {
         data.total = res.data.total
         data.list.push(...normalPending(res.data.data))
         data.page = res.data.page
         data.type = type
       }).then(() => {
-        this.$loading.close()
+        loading.close()
       })
     }
 
@@ -193,9 +193,6 @@ export default {
         this.$success()
         this.refreshState()
       })
-    },
-    onOpenComment() {
-
     },
     onSubmitReview(id, gid, youare, pending) {
       handlePending(id, gid, youare, pending).then(() => {

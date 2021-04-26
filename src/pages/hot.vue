@@ -108,7 +108,7 @@ import {createUser} from "../model/user";
 import Scroll from '../components/scroll'
 import {getData} from '../common/js/dom'
 import {useStore} from 'vuex'
-
+import {loading} from '../plugin/loading'
 const normalUser = noramlArray(createUser)
 const EACH_PAGE = 20 // 每页的数量
 const ITEMHEIGHT = 50
@@ -150,14 +150,14 @@ export default {
       _getAllUserByPage(data.page)
     }
     function _getAllUserByPage(page) {
-      this.$loading()
+      loading()
       getAllUser(page).then(res => {
         list.value = normalUser(res.data.data)
         data.page = res.data.page
         data.pageArray.push(res.data.page)
         data.pages = res.data.pages
       }).then(() => {
-        this.$loading.close()
+        loading.close()
       })
     }
 
